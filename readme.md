@@ -1,6 +1,6 @@
 # Jewellery Store 💎
 
-A modern, responsive jewellery e-commerce website built with HTML, CSS, and JavaScript.
+A modern, responsive jewellery e-commerce website built with nodejs, CSS, next js , tailwind ,and JavaScript.
 
 ## ✨ Features
 - Dark theme UI
@@ -12,14 +12,10 @@ A modern, responsive jewellery e-commerce website built with HTML, CSS, and Java
 ## 🚀 Live Preview
 (You can add your GitHub Pages / Vercel link here later)
 
-## 📁 Project Structure
-- index.html
-- style.css
-- script.js
-- images/
+
 
 ## 📌 How to Run
-Just open `index.html` in any browser.
+Just import folder in your ide and run npm install and npm dev run in any browser.
 
 ## 🛠️ Built With
 - HTML5
