@@ -18,12 +18,12 @@ A modern, responsive jewellery e-commerce website built with nodejs, CSS, next j
 Just import folder in your ide and run npm install and npm dev run in any browser.
 
 ## 🛠️ Built With
-- HTML5
-- CSS3
-- JavaScript
+- Next js, node js,
+- CSS
+- tailwind
 
 ## 📷 Screenshots
-(Add screenshots here later)
+
 
 ## 👤 Author
 Anonymoussss-byte
