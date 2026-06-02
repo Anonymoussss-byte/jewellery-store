@@ -75,10 +75,10 @@ export function WishlistDrawer() {
             exit={{ x: "100%" }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             onClick={(event) => event.stopPropagation()}
-            className="ml-auto flex h-full w-full max-w-[34rem] flex-col border-l border-gold-300/18 bg-obsidian/96 shadow-2xl backdrop-blur-2xl"
+            className="ml-auto flex h-full w-full max-w-[34rem] flex-col bg-obsidian/96 shadow-2xl backdrop-blur-2xl"
             style={{ willChange: "transform" }}
           >
-            <div className="flex items-center justify-between border-b border-white/10 px-5 py-5 sm:px-7">
+            <div className="flex items-center justify-between px-5 py-5 sm:px-7">
               <div>
                 <p className="text-xs uppercase tracking-[0.24em] text-ruby">Curated Collection</p>
                 <h2 className="font-display mt-1 text-3xl text-diamond-100">
@@ -88,7 +88,7 @@ export function WishlistDrawer() {
               <button
                 type="button"
                 onClick={closeWishlist}
-                className="grid h-11 w-11 place-items-center rounded-full border border-white/12 text-diamond-100 transition hover:border-gold-300/45"
+                className="grid h-11 w-11 place-items-center rounded-full text-diamond-100 transition hover:bg-white/5 hover:text-gold-200"
                 aria-label="Close wishlist"
               >
                 <X className="h-5 w-5" />
@@ -140,7 +140,7 @@ export function WishlistDrawer() {
                           <button
                             type="button"
                             onClick={() => toggleWishlist(product.id)}
-                            className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/10 text-diamond-300/70 transition hover:border-ruby hover:text-ruby"
+                            className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-diamond-300/70 transition hover:bg-white/5 hover:text-ruby"
                             aria-label={`Remove ${product.name}`}
                           >
                             <Trash2 className="h-4 w-4" />

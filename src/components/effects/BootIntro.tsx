@@ -4,8 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { Gem } from "lucide-react";
 import { gsap } from "gsap";
 
-const INTRO_KEY = "aurelia-intro-complete-v1";
-
 const particles = Array.from({ length: 28 }, (_, index) => ({
   id: index,
   left: 8 + ((index * 17) % 84),
@@ -20,10 +18,8 @@ export default function BootIntro() {
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const hasSeenIntro = window.sessionStorage.getItem(INTRO_KEY) === "true";
 
-    if (reducedMotion || hasSeenIntro) {
-      window.sessionStorage.setItem(INTRO_KEY, "true");
+    if (reducedMotion) {
       return;
     }
 
@@ -39,7 +35,6 @@ export default function BootIntro() {
       const timeline = gsap.timeline({
         defaults: { ease: "power3.out" },
         onComplete: () => {
-          window.sessionStorage.setItem(INTRO_KEY, "true");
           setIsVisible(false);
         }
       });
@@ -58,7 +53,6 @@ export default function BootIntro() {
   }, [isVisible]);
 
   const skipIntro = () => {
-    window.sessionStorage.setItem(INTRO_KEY, "true");
     setIsVisible(false);
   };
 

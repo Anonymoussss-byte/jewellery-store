@@ -1,11 +1,13 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { CheckCircle2, Instagram, Mail, MapPin, Phone, Send, Sparkles } from "lucide-react";
+import { CheckCircle2, Instagram, Mail, MapPin, Phone, Send, Sparkles, ChevronDown } from "lucide-react";
 
 export function SiteFooter() {
   const [newsletterStatus, setNewsletterStatus] = useState("");
   const [contactStatus, setContactStatus] = useState("");
+  const [interest, setInterest] = useState("High jewelry appointment");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const submitNewsletter = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -98,16 +100,35 @@ export function SiteFooter() {
               placeholder="Email"
               className="min-h-12 rounded-xl border border-white/12 bg-black/25 px-4 text-sm text-diamond-100 placeholder:text-diamond-300/38"
             />
-            <select
-              name="interest"
-              className="min-h-12 rounded-xl border border-white/12 bg-black/25 px-4 text-sm text-diamond-100"
-              defaultValue="High jewelry appointment"
-            >
-              <option>High jewelry appointment</option>
-              <option>Engagement ring consultation</option>
-              <option>Watch and bracelet styling</option>
-              <option>Private commission</option>
-            </select>
+            <div className="relative">
+              <input type="hidden" name="interest" value={interest} />
+              <button
+                type="button"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="flex w-full min-h-12 items-center justify-between rounded-xl border border-white/12 bg-black/25 px-4 text-sm text-diamond-100 focus:border-gold-300/50 focus:outline-none"
+              >
+                {interest}
+                <ChevronDown className={`h-4 w-4 text-gold-300/70 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+              
+              {isDropdownOpen && (
+                <div className="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-xl border border-white/12 bg-[#050505] shadow-[0_8px_32px_rgba(0,0,0,0.8)]">
+                  {["High jewelry appointment", "Engagement ring consultation", "Watch and bracelet styling", "Private commission"].map((opt) => (
+                    <button
+                      key={opt}
+                      type="button"
+                      onClick={() => {
+                        setInterest(opt);
+                        setIsDropdownOpen(false);
+                      }}
+                      className={`w-full px-4 py-3 text-left text-sm transition-colors ${interest === opt ? 'bg-gold-300/10 text-gold-100' : 'text-diamond-100 hover:bg-white/5 hover:text-white'}`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             <textarea
               name="message"
               rows={4}
