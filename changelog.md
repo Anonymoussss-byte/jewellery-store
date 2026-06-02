@@ -26,6 +26,6 @@ All notable changes to the Aurelia Maison project will be documented in this fil
 
 ### 🐛 Bug Fixes
 - **Animation Integrity:** Resolved a React duplicate key error (`Encountered two children with the same key`) in `CartDrawer.tsx` by correctly isolating the `CheckoutModal` from the primary `AnimatePresence` lifecycle wrapper.
-- **Boot Sequence Logic:** Fixed the `BootIntro` loader failing to trigger on page refresh by removing restrictive `sessionStorage` caching logic.
+- **Boot Sequence Logic:** Fixed the `BootIntro` loader failing to trigger on page refresh by removing restrictive `sessionStorage` caching logic. Also fixed a visual flash (FOUC) where the main site content appeared before the loader by changing it to a static import and defaulting visibility to true for instant SSR masking.
 - **Z-Index & Layout Clipping:** Fixed z-index stacking bugs where open dropdowns were rendering underneath sibling elements. Adjusted CartDrawer dropdowns to open upwards (`direction="up"`) to prevent `overflow-y` clipping.
 - **Hydration Mismatches:** Resolved Next.js React hydration mismatch errors (`cz-shortcut-listen`) triggered by external browser extensions injecting attributes into the DOM.

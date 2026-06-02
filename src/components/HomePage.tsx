@@ -20,9 +20,7 @@ const AmbientStage = dynamic(() => import("@/components/effects/AmbientStage"), 
   ssr: false
 });
 
-const BootIntro = dynamic(() => import("@/components/effects/BootIntro"), {
-  ssr: false
-});
+import BootIntro from "@/components/effects/BootIntro";
 
 const MotionOrchestrator = dynamic(() => import("@/components/effects/MotionOrchestrator"), {
   ssr: false
