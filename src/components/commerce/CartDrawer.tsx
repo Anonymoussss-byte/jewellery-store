@@ -2,11 +2,71 @@
 
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { CheckCircle2, Minus, Plus, ShieldCheck, ShoppingBag, Tag, Trash2, X } from "lucide-react";
-import { FormEvent, useEffect, useState } from "react";
+import { CheckCircle2, ChevronDown, Minus, Plus, ShieldCheck, ShoppingBag, Tag, Trash2, X } from "lucide-react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { useCart } from "@/lib/cart-context";
 import { cn } from "@/lib/cn";
 import { formatCurrency } from "@/lib/format";
+
+function CustomDropdown({ options, value, onChange, direction = "down" }: { options: string[], value: string, onChange: (val: string) => void, direction?: "up" | "down" }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className={cn("relative", isOpen ? "z-50" : "z-10")} ref={dropdownRef}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className={cn(
+          "flex min-h-11 w-full items-center justify-between rounded-xl border px-4 text-sm transition-all",
+          isOpen ? "border-gold-300/50 bg-black/60 text-gold-100" : "border-white/12 bg-black/35 text-diamond-100 hover:border-gold-300/30"
+        )}
+      >
+        {value}
+        <ChevronDown className={cn("h-4 w-4 transition-transform", isOpen ? "rotate-180 text-gold-200" : "text-diamond-300/50")} />
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: direction === "down" ? -8 : 8, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: direction === "down" ? -8 : 8, scale: 0.98 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className={cn(
+              "absolute left-0 right-0 z-50 overflow-hidden rounded-xl border border-gold-300/20 bg-obsidian shadow-2xl",
+              direction === "down" ? "top-[calc(100%+0.5rem)]" : "bottom-[calc(100%+0.5rem)]"
+            )}
+            style={{ willChange: "transform, opacity" }}
+          >
+            {options.map((option) => (
+              <button
+                key={option}
+                type="button"
+                onClick={() => { onChange(option); setIsOpen(false); }}
+                className={cn(
+                  "w-full px-4 py-3 text-left text-sm transition-colors",
+                  value === option ? "bg-gold-300/10 text-gold-100" : "text-diamond-200/70 hover:bg-white/5 hover:text-diamond-100"
+                )}
+              >
+                {option}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 export function CartDrawer() {
   const {
@@ -23,6 +83,8 @@ export function CartDrawer() {
     clearCart
   } = useCart();
   const [checkoutStatus, setCheckoutStatus] = useState("");
+  const [shippingMethod, setShippingMethod] = useState("Insured overnight");
+  const [paymentMethod, setPaymentMethod] = useState("Private card link");
 
   useEffect(() => {
     if (!isCartOpen) {
@@ -64,6 +126,7 @@ export function CartDrawer() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={closeCart}
+          style={{ willChange: "opacity" }}
         >
           <motion.aside
             role="dialog"
@@ -72,9 +135,10 @@ export function CartDrawer() {
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 260, damping: 32 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             onClick={(event) => event.stopPropagation()}
             className="ml-auto flex h-full w-full max-w-[34rem] flex-col border-l border-gold-300/18 bg-obsidian/96 shadow-2xl backdrop-blur-2xl"
+            style={{ willChange: "transform" }}
           >
             <div className="flex items-center justify-between border-b border-white/10 px-5 py-5 sm:px-7">
               <div>
@@ -105,9 +169,17 @@ export function CartDrawer() {
                   </div>
                 </div>
               ) : (
-                <div className="space-y-4">
-                  {lines.map((line) => (
-                    <article key={line.lineId} className="diamond-panel grid grid-cols-[6.5rem_1fr] gap-4 rounded-2xl p-3">
+                <motion.ul layout className="space-y-4">
+                  <AnimatePresence initial={false}>
+                    {lines.map((line) => (
+                      <motion.li
+                        layout
+                        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
+                        key={line.lineId}
+                        className="diamond-panel grid grid-cols-[6.5rem_1fr] gap-4 rounded-2xl p-3"
+                      >
                       <div className="relative aspect-square overflow-hidden rounded-xl bg-black">
                         <Image
                           src={line.product.image}
@@ -165,9 +237,10 @@ export function CartDrawer() {
                           </p>
                         </div>
                       </div>
-                    </article>
-                  ))}
-                </div>
+                      </motion.li>
+                    ))}
+                  </AnimatePresence>
+                </motion.ul>
               )}
 
               <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
@@ -197,22 +270,18 @@ export function CartDrawer() {
                   Premium checkout
                 </p>
                 <div className="grid gap-3">
-                  <select
-                    className="min-h-11 rounded-xl border border-white/12 bg-black/35 px-4 text-sm text-diamond-100"
-                    defaultValue="Insured overnight"
-                  >
-                    <option>Insured overnight</option>
-                    <option>White-glove courier</option>
-                    <option>Atelier pickup</option>
-                  </select>
-                  <select
-                    className="min-h-11 rounded-xl border border-white/12 bg-black/35 px-4 text-sm text-diamond-100"
-                    defaultValue="Private card link"
-                  >
-                    <option>Private card link</option>
-                    <option>Bank wire concierge</option>
-                    <option>Split deposit</option>
-                  </select>
+                  <CustomDropdown 
+                    options={["Insured overnight", "White-glove courier", "Atelier pickup"]} 
+                    value={shippingMethod} 
+                    onChange={setShippingMethod}
+                    direction="up"
+                  />
+                  <CustomDropdown 
+                    options={["Private card link", "Bank wire concierge", "Split deposit"]} 
+                    value={paymentMethod} 
+                    onChange={setPaymentMethod}
+                    direction="up"
+                  />
                 </div>
                 <button
                   type="submit"

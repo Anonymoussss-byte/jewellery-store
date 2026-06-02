@@ -10,6 +10,9 @@ import { FeaturedCollection } from "@/components/sections/FeaturedCollection";
 import { Hero } from "@/components/sections/Hero";
 import { Showcase } from "@/components/sections/Showcase";
 import { Testimonials } from "@/components/sections/Testimonials";
+import { CartDrawer } from "@/components/commerce/CartDrawer";
+import { WishlistDrawer } from "@/components/commerce/WishlistDrawer";
+import { QuickViewModal } from "@/components/commerce/QuickViewModal";
 import { CartProvider } from "@/lib/cart-context";
 import type { Product, ProductCategory } from "@/types/product";
 
@@ -24,16 +27,6 @@ const BootIntro = dynamic(() => import("@/components/effects/BootIntro"), {
 const MotionOrchestrator = dynamic(() => import("@/components/effects/MotionOrchestrator"), {
   ssr: false
 });
-
-const CartDrawer = dynamic(
-  () => import("@/components/commerce/CartDrawer").then((module) => module.CartDrawer),
-  { ssr: false }
-);
-
-const QuickViewModal = dynamic(
-  () => import("@/components/commerce/QuickViewModal").then((module) => module.QuickViewModal),
-  { ssr: false }
-);
 
 export function HomePage() {
   const [activeCategory, setActiveCategory] = useState<ProductCategory | "all">("all");
@@ -59,6 +52,7 @@ export function HomePage() {
       </main>
       <SiteFooter />
       <CartDrawer />
+      <WishlistDrawer />
       <QuickViewModal product={quickViewProduct} onClose={() => setQuickViewProduct(null)} />
     </CartProvider>
   );

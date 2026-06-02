@@ -74,7 +74,7 @@ export default function BootIntro() {
       aria-label="Aurelia Maison intro"
       aria-modal="true"
     >
-      <div className="intro-glow absolute left-1/2 top-1/2 h-[36rem] w-[36rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-400/18 opacity-40 blur-3xl" />
+      <div className="intro-glow absolute left-1/2 top-1/2 h-[36rem] w-[36rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(215,166,61,0.18)_0%,transparent_60%)] opacity-40" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(255,248,213,0.18),transparent_34%),linear-gradient(120deg,rgba(255,255,255,0.05),transparent_45%,rgba(215,166,61,0.08))]" />
       {particles.map((particle) => (
         <span
