@@ -16,7 +16,7 @@ const navItems = [
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { cartCount, wishlistCount, openCart } = useCart();
+  const { cartCount, wishlistCount, openCart, openWishlist } = useCart();
 
   const closeMenu = () => setIsMenuOpen(false);
 
@@ -62,8 +62,9 @@ export function Header() {
           >
             <Search className="h-4 w-4" />
           </button>
-          <a
-            href="#collection"
+          <button
+            type="button"
+            onClick={openWishlist}
             className="relative grid h-10 w-10 place-items-center rounded-full border border-white/10 text-diamond-200/80 transition hover:border-gold-300/50 hover:text-gold-100"
             aria-label={`${wishlistCount} wishlisted pieces`}
           >
@@ -73,7 +74,7 @@ export function Header() {
                 {wishlistCount}
               </span>
             )}
-          </a>
+          </button>
           <button
             type="button"
             onClick={openCart}

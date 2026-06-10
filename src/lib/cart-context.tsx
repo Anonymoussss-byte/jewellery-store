@@ -56,6 +56,9 @@ type CartContextValue = {
   isWishlisted: (productId: string) => boolean;
   openCart: () => void;
   closeCart: () => void;
+  isWishlistOpen: boolean;
+  openWishlist: () => void;
+  closeWishlist: () => void;
 };
 
 const STORAGE_KEY = "aurelia-commerce-state-v1";
@@ -78,6 +81,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [couponCode, setCouponCode] = useState("");
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [hasLoadedStorage, setHasLoadedStorage] = useState(false);
 
   useEffect(() => {
@@ -238,6 +242,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
       setCouponCode,
       toggleWishlist,
       isWishlisted,
+      isWishlistOpen,
+      openWishlist: () => setIsWishlistOpen(true),
+      closeWishlist: () => setIsWishlistOpen(false),
       openCart: () => setIsCartOpen(true),
       closeCart: () => setIsCartOpen(false)
     }),
@@ -248,6 +255,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       couponResult,
       hydratedLines,
       isCartOpen,
+      isWishlistOpen,
       isWishlisted,
       removeItem,
       toggleWishlist,

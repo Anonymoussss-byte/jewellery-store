@@ -20,6 +20,7 @@ const particleSeeds = [
 export default function AmbientStage() {
   const cursorRef = useRef<HTMLDivElement | null>(null);
   const dotRef = useRef<HTMLDivElement | null>(null);
+  const glowRef = useRef<HTMLDivElement | null>(null);
 
   const particles = useMemo(
     () =>
@@ -49,15 +50,21 @@ export default function AmbientStage() {
     const tick = () => {
       currentX += (targetX - currentX) * 0.16;
       currentY += (targetY - currentY) * 0.16;
-      document.documentElement.style.setProperty("--cursor-x", `${currentX}px`);
-      document.documentElement.style.setProperty("--cursor-y", `${currentY}px`);
 
-      if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate3d(${currentX - 22}px, ${currentY - 22}px, 0)`;
-      }
+      // Only update DOM if distance is significant
+      if (Math.abs(targetX - currentX) > 0.05 || Math.abs(targetY - currentY) > 0.05) {
+        if (glowRef.current) {
+          // 56rem = 896px, half is 448px
+          glowRef.current.style.transform = `translate3d(${currentX - 448}px, ${currentY - 448}px, 0)`;
+        }
 
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate3d(${targetX - 3}px, ${targetY - 3}px, 0)`;
+        if (cursorRef.current) {
+          cursorRef.current.style.transform = `translate3d(${currentX - 22}px, ${currentY - 22}px, 0)`;
+        }
+        
+        if (dotRef.current) {
+          dotRef.current.style.transform = `translate3d(${targetX - 3}px, ${targetY - 3}px, 0)`;
+        }
       }
 
       frame = requestAnimationFrame(tick);
@@ -89,9 +96,20 @@ export default function AmbientStage() {
   return (
     <>
       <div aria-hidden="true" className="noise-overlay" />
+      
+      {/* GPU Accelerated Mouse Glow */}
+      <div
+        ref={glowRef}
+        aria-hidden="true"
+        className="gpu-layer pointer-events-none fixed left-0 top-0 z-0 hidden h-[56rem] w-[56rem] rounded-full md:block"
+        style={{
+          background: "radial-gradient(circle, rgba(215, 166, 61, 0.12) 0%, transparent 28rem)"
+        }}
+      />
+
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        <div className="absolute left-[-12%] top-0 h-[46rem] w-[82rem] -rotate-12 bg-[linear-gradient(100deg,transparent,rgba(215,166,61,0.12),transparent_58%)] blur-3xl animate-aurora" />
-        <div className="absolute bottom-[-10rem] right-[-18%] h-[38rem] w-[70rem] rotate-12 bg-[linear-gradient(96deg,transparent,rgba(220,232,247,0.09),transparent_62%)] blur-3xl animate-aurora [animation-delay:4s]" />
+        <div className="gpu-layer absolute left-[-12%] top-0 h-[46rem] w-[82rem] -rotate-12 bg-[radial-gradient(ellipse_at_center,rgba(215,166,61,0.12)_0%,transparent_60%)] animate-aurora" />
+        <div className="gpu-layer absolute bottom-[-10rem] right-[-18%] h-[38rem] w-[70rem] rotate-12 bg-[radial-gradient(ellipse_at_center,rgba(220,232,247,0.09)_0%,transparent_60%)] animate-aurora [animation-delay:4s]" />
         {particles.map((particle) => (
           <span
             key={particle.id}
@@ -108,7 +126,7 @@ export default function AmbientStage() {
       <div
         ref={cursorRef}
         aria-hidden="true"
-        className="pointer-events-none fixed left-0 top-0 z-[70] hidden h-11 w-11 rounded-full border border-gold-300/35 mix-blend-screen transition-[border-color,transform] duration-200 md:block"
+        className="pointer-events-none fixed left-0 top-0 z-[70] hidden h-11 w-11 rounded-full border border-gold-300/35 transition-[border-color,transform] duration-200 md:block"
       />
       <div
         ref={dotRef}

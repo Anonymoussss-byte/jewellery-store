@@ -39,6 +39,7 @@ export default function MotionOrchestrator() {
               y: 0,
               duration: 0.95,
               ease: "power3.out",
+              force3D: true,
               scrollTrigger: {
                 trigger: element,
                 start: "top 82%",
@@ -52,6 +53,7 @@ export default function MotionOrchestrator() {
           gsap.to(element, {
             yPercent: -8,
             ease: "none",
+            force3D: true,
             scrollTrigger: {
               trigger: element,
               start: "top bottom",
